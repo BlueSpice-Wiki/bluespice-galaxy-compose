@@ -1,4 +1,4 @@
-<img alt="BlueSpice Logo" align="right" src="https://bluespice.com/wp-content/uploads/2026/09/BlueSpice-Galaxy_Logo_Textmarke.svg" alt="BlueSpice MediaWiki logo" wigth="188" />
+<img alt="BlueSpice Logo" align="right" src="https://bluespice.com/wp-content/uploads/2026/09/BlueSpice-Galaxy_Logo_Textmarke.svg" alt="BlueSpice MediaWiki logo" width="188" />
 
 # `bluespice-galaxy-compose` repo for BlueSpice Galaxy
 
