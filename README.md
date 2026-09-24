@@ -1,26 +1,9 @@
-# BlueSpice Galaxy "Deploy"
-<img style="display:block;margin:auto" src="https://bluespice.com/wp-content/uploads/2022/09/bluespice_logo.png" alt="BlueSpice MediaWiki logo" />
-Toolkit for containerized deployment of BlueSpice Galaxy Wiki.
+<img alt="BlueSpice Logo" align="right" src="https://bluespice.com/wp-content/uploads/2022/09/bluespice_logo.png" />
 
-## Deployment
-Please follow the [installation guide](https://en.wiki5.bluespice.com/wiki/Setup:Installation_Guide/Docker) in the BlueSpice Helpdesk 📚. For questions and support, please use the contact [form 🌐](https://bluespice.com/contact/) or visit the [community forums 💡](https://community.bluespice.com/).
+# `bluespice-deploy` repo for BlueSpice
 
+This repo controls the Bluespice Stack. 
 
-## Configuration
-| Variable Name                | Default Value  | Description                                          | Optional |
-|------------------------------|----------------|------------------------------------------------------|----------|
-|`BLUESPICE_SERVICE_REPOSITORY`| `bluespice`    | pull Docker images from an alternative service repo  | Yes      |
-| `SERVICES_REPOSITORY_PATH`   | none           |a previous alias to set `BLUESPICE_SERVICE_REPOSITORY`| Yes      |
-| `BLUESPICE_WIKI_IMAGE`       |edition-specific| use an alternative image for the wiki-containers     | Yes      |
-| `COMPOSE_PROJECT_NAME`       | `bluespice`    | use an alternate-docker-compose-name                 | Yes      |
-| `DATADIR`                    | `./_volume`    | Path to persitent Volumes                            | Yes      |
-| `ANTIVIRUS`                  | `false`        | enables ClamAV antivirus service                     | Yes      |
-| `LETSENCRYPT`                | `false`        | enables LetsEcrpyt cert renew                        | Yes      |
-| `KERBEROS`                   | `false`        | enables Kerberos-Authentication                      | Yes      |
-| `TZ`                         | `UTC`          | Timezone for BlueSpice and container system time     | Yes      |
-| `CHAT`                       | `false`        | enables [Chat service connection](https://en.wiki.bluespice.com/wiki/Manual:Extension/ChatBot)                          | Yes      |
-| `AI`                         | `false`        | enables [AI service connection](https://en.wiki.bluespice.com/wiki/Manual:AI_integrations_-_Overview)                              | Yes      |
+It is part of the [BlueSpice MediaWiki deployment stack](https://github.com/hallowelt/bluespice-deploy). Instructions on how to use it can be found on the [official helpdesk 📚](https://en.wiki.bluespice.com/wiki/Setup:Installation_Guide/Docker). For questions and support, please use the [contact form 🌐](https://bluespice.com/contact/) or visit the [community forums 💡](https://community.bluespice.com/).
 
-For more variables to set in `.env`, please also check [documentation](https://github.com/hallowelt/docker-bluespice-wiki/blob/main/README.md) of the image behind the wiki-containers.
-
-If the environment variable `DEV_WIKI_DEBUG` is set, one can set the `debug-entrypoint` GPC (=`$_REQUEST`) to a value matching the `MW_ENTRY_POINT` constant in context of the application to enable full debug log to `stdout` for any call to the specified entry point.
+The `main` branch of this repository is intentionally kept empty. Please refer to the specific version branches (e.g., `5.1.x`, `5.2.x`, etc.) for the relevant Dockerfiles and configurations corresponding to each BlueSpice version.
