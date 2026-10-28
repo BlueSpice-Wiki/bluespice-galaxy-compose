@@ -32,30 +32,12 @@ services:
       timeout: 5s
       retries: 10
 
-  jobqueue:
-    image: ${BLUESPICE_SERVICE_REPOSITORY}/galaxy-keyvaluestore:${VERSION}
-    container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-jobqueue
-    healthcheck:
-      test: valkey-cli ping | grep -q PONG
-      start_period: 5s
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    volumes:
-      - ${DATADIR}/keyvaluestore:/data
-    restart: unless-stopped
-    command: valkey-server /etc/valkey/valkey.conf
-
   wiki-installer:
     depends_on:
         database:
             condition: service_healthy
         search:
             condition: service_healthy
-        jobqueue:
-            condition: service_healthy
-    environment:
-        JOBQUEUE_HOST: ${JOBQUEUE_HOST:-jobqueue}
 
   wiki-web:
     depends_on:
@@ -63,17 +45,10 @@ services:
             condition: service_healthy
         search:
             condition: service_healthy
-        jobqueue:
-            condition: service_healthy
-    environment:
-        JOBQUEUE_HOST: ${JOBQUEUE_HOST:-jobqueue}
+
   wiki-task:
     depends_on:
         database:
             condition: service_healthy
         search:
             condition: service_healthy
-        jobqueue:
-            condition: service_healthy
-    environment:
-        JOBQUEUE_HOST: ${JOBQUEUE_HOST:-jobqueue}

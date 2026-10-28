@@ -17,7 +17,7 @@ case "${EDITION}" in
 		SERVICE_REPOSITORY=bluespice
 		;;
 	sky|sapphire)
-		EXTENDED_TOOLS="${EXTENDED_TOOLS} -f docker-compose.metadatastore.yml"
+		EXTENDED_TOOLS="${EXTENDED_TOOLS} -f docker-compose.metadatastore.yml -f docker-compose.jobqueue.yml"
 		WIKI_IMAGE=docker.bluespice.com/bluespice-galaxy/${EDITION}/galaxy-wiki:${VERSION}
 		SERVICE_REPOSITORY=docker.bluespice.com/bluespice-galaxy
 		;;

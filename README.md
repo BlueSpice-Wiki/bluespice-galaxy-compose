@@ -12,7 +12,8 @@ Set `EDITION` in `.env`. Each edition has its own wiki image, the service images
 
 | Service                        | `glacier` | `sky` | `sapphire` |
 |--------------------------------|:---------:|:-----:|:----------:|
-| Wiki, search, database, cache, PDF, formula, diagram, wire, job queue | ✅ | ✅ | ✅ |
+| Wiki, search, database, cache, PDF, formula, diagram, wire | ✅ | ✅ | ✅ |
+| Shared job queue (Redis/Valkey) | –        | ✅    | ✅         |
 | Metadata store (NeoWiki)       | –         | ✅    | ✅         |
 | CollabPads                     | ✅        | ✅    | ✅         |
 | Antivirus (`ANTIVIRUS`)        | optional  | optional | optional |
