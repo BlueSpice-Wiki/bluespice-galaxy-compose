@@ -38,10 +38,10 @@ services:
       CHAT_HOST: chat
     secrets:
       - INTERNAL_CHAT_TOKEN
-      - INTERNAL_CHAT_WIKI_ACCESS_TOKEN
+      - INTERNAL_CHAT_WIKI_API_KEY
   wiki-task:
     environment:
       CHAT_HOST: chat
     secrets:
       - INTERNAL_CHAT_TOKEN
-      - INTERNAL_CHAT_WIKI_ACCESS_TOKEN
+      - INTERNAL_CHAT_WIKI_API_KEY
