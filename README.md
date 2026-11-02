@@ -60,6 +60,7 @@ To load all images of all editions from a registry with the layout `<registry>/<
 | `AI`                         | `false`        | enables [AI service connection](https://en.wiki.bluespice.com/wiki/Manual:AI_integrations_-_Overview), requires `CHAT`, not available in `glacier` | Yes      |
 | `MCP_OAUTH_CLIENT_ID`        | none           | client key of the OAuth2 client of the MCP server, see [MCP server](#mcp-server) | Yes |
 | `MCP_OAUTH_CLIENT_SECRET`    | none           | client secret of the OAuth2 client of the MCP server, see [MCP server](#mcp-server) | Yes |
+| `PARALLEL_RUNJOBS_SERVICE_LOGLEVEL` | `notice` | log level of the job runner in `wiki-task` (`debug`, `info`, `notice`, `warn`, `error`) | Yes |
 
 For more variables to set in `.env`, please also check [documentation](https://github.com/hallowelt/docker-bluespice-wiki/blob/main/README.md) of the image behind the wiki-containers.
 

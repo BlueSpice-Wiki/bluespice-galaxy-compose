@@ -72,6 +72,7 @@ services:
     command: ["start-task --runAll"]
     environment:
       <<: *common-environment
+      PARALLEL_RUNJOBS_SERVICE_LOGLEVEL: ${PARALLEL_RUNJOBS_SERVICE_LOGLEVEL:-}
     volumes:
       - ${DATADIR}/wiki:/data
     secrets: *common-secrets
