@@ -2,7 +2,7 @@ services:
 
   ai:
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-ai
-    image: ${BLUESPICE_SERVICE_REPOSITORY}/ai:${VERSION}
+    image: ${BLUESPICE_SERVICE_REPOSITORY}/galaxy-ai:${VERSION}
     depends_on:
       - ai-database
     environment:
@@ -32,7 +32,6 @@ services:
       TZ: ${TZ:-UTC}
     secrets:
       - AI__SECURITY__STATIC_API_TOKEN
-      - AI__MCP__API_KEY
     volumes:
       - ${DATADIR}/wiki/bluespice/rag:/watch
     restart: unless-stopped
@@ -60,7 +59,7 @@ services:
 
   prompt:
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-prompt
-    image: ${BLUESPICE_SERVICE_REPOSITORY}/prompt:${VERSION}
+    image: ${BLUESPICE_SERVICE_REPOSITORY}/galaxy-prompt:${VERSION}
     depends_on:
       chat:
         condition: service_healthy
@@ -68,33 +67,10 @@ services:
       PROMPT_WIKI_BASE_PATH: http://wiki-web:9090
       PROMPT_BRIDGE_URL: http://chat:3000
       VIRTUAL_HOST: ${WIKI_HOST}
-      VIRTUAL_PATH: /_prompt/
+      VIRTUAL_PATH: ${WIKI_BASE_PATH:-/}_prompt/
       VIRTUAL_PORT: 3336
       VIRTUAL_DEST: /
     secrets:
       - PROMPT_TOKEN_SALT
       - PROMPT_BRIDGE_TOKEN
     restart: unless-stopped
-
-  mcp:
-    container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-mcp
-    image: ${BLUESPICE_SERVICE_REPOSITORY}/mcp:${VERSION}
-    depends_on:
-      wiki-task:
-        condition: service_healthy
-    environment:
-      VIRTUAL_HOST: ${WIKI_HOST}
-      VIRTUAL_PATH: /_mcp/
-      VIRTUAL_PORT: 4000
-      VIRTUAL_DEST: /
-      MCP_WIKI_BASE_PATH: http://wiki-web:9090
-      MCP_OAUTH_ISSUER: http://wiki-web:9090/w/oauth2
-      MCP_OAUTH_AUTHORIZATION_ENDPOINT: http://wiki-web:9090/w/oauth2/authorize
-      MCP_OAUTH_TOKEN_ENDPOINT: http://wiki-web:9090/w/oauth2/access_token
-      MCP_OAUTH_SCOPES: openid profile mcp
-      MCP_OAUTH_PROXY_TOKEN_ENDPOINT: true
-    restart: unless-stopped
-    secrets:
-      - MCP_TOKEN_SALT
-      - MCP_WIKI_API_KEY
-

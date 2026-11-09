@@ -2,7 +2,6 @@ name: ${COMPOSE_PROJECT_NAME:-bluespice}
 
 x-common-environment: &common-environment
   VERSION: ${VERSION}
-  EDITION: ${EDITION}
   TZ: ${TZ:-UTC}
 
   WIKI_NAME: ${WIKI_NAME}
@@ -30,7 +29,6 @@ x-common-environment: &common-environment
 
   CHAT_HOST: ${CHAT_HOST:--}
 
-  METADATASTORE_PASS: ${METADATASTORE_PASS}
 
 x-common-secrets: &common-secrets
   - INTERNAL_SIMPLESAMLPHP_ADMIN_PASS
@@ -74,7 +72,7 @@ services:
     command: ["start-task --runAll"]
     environment:
       <<: *common-environment
-      BACKUP_HOUR: ${BACKUP_HOUR}
+      PARALLEL_RUNJOBS_SERVICE_LOGLEVEL: ${PARALLEL_RUNJOBS_SERVICE_LOGLEVEL:-}
     volumes:
       - ${DATADIR}/wiki:/data
     secrets: *common-secrets

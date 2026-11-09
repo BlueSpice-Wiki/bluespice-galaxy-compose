@@ -1,7 +1,7 @@
 services:
 
   proxy:
-    image: ${BLUESPICE_SERVICE_REPOSITORY}/proxy:${VERSION}
+    image: ${BLUESPICE_SERVICE_REPOSITORY}/galaxy-proxy:${VERSION}
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-proxy
     restart: unless-stopped
     ports:
@@ -18,6 +18,7 @@ services:
   wiki-web:
     environment:
       VIRTUAL_HOST: ${WIKI_HOST}
+      # Catch-all, also with WIKI_BASE_PATH: the wiki serves root level paths like `/.well-known/` too
       VIRTUAL_PATH: /
       VIRTUAL_PORT: 9090
 
