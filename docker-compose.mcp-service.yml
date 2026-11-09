@@ -1,7 +1,7 @@
 # MCP server of the wiki (Extension:WikiMCPTools), part of all editions, served at `<wiki>/_mcp/`. It has no
-# static access to the wiki: the tools run with the OAuth2 tokens of the users. The OAuth2 client
-# (`MCP_OAUTH_CLIENT_ID`, `MCP_OAUTH_CLIENT_SECRET`) is created manually on the wiki after the installation,
-# see README.md, "MCP server".
+# static access to the wiki: the tools run with the OAuth2 tokens of the users. The MCP server has no OAuth2
+# client of its own. Each MCP client (e.g. Claude Desktop) is registered on the wiki as an OAuth2 consumer
+# after the installation, see README.md, "MCP server".
 services:
 
   mcp:
@@ -26,8 +26,5 @@ services:
       MCP_PUBLIC_URL: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}_mcp
       MCP_OAUTH_PROXY_TOKEN_ENDPOINT: true
       MCP_OAUTH_SCOPES: openid profile mcp
-      MCP_OAUTH_CLIENT_ID: ${MCP_OAUTH_CLIENT_ID:-}
-      MCP_OAUTH_CLIENT_SECRET: ${MCP_OAUTH_CLIENT_SECRET:-}
-      MCP_OAUTH_REDIRECT_URI: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}_mcp/oauth/callback
       MCP_OAUTH_PUBLIC_WIKI_BASE: ${WIKI_PROTOCOL}://${WIKI_HOST}
     restart: unless-stopped
