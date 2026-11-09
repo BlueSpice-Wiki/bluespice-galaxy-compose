@@ -28,3 +28,8 @@ services:
       - WIRE_API_KEY
       - WIRE_TOKEN_SALT
     restart: unless-stopped
+
+  officefileconverter:
+    container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-officefileconverter
+    image: gotenberg/gotenberg:8
+    restart: unless-stopped
