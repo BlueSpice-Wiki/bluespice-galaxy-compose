@@ -60,6 +60,8 @@ To load all images of all editions from a registry with the layout `<registry>/<
 | `AI`                         | `false`        | enables [AI service connection](https://en.wiki.bluespice.com/wiki/Manual:AI_integrations_-_Overview), requires `CHAT`, not available in `glacier` | Yes      |
 | `MCP_OAUTH_CLIENT_ID`        | none           | client key of the OAuth2 client of the MCP server, see [MCP server](#mcp-server) | Yes |
 | `MCP_OAUTH_CLIENT_SECRET`    | none           | client secret of the OAuth2 client of the MCP server, see [MCP server](#mcp-server) | Yes |
+| `CHATBOT_OAUTH_CLIENT_ID`    | none           | client ID of the OAuth consumer the chatbot uses to act on behalf of users, see [Chatbot OAuth consumer](#chatbot-oauth-consumer) | Yes |
+| `CHATBOT_OAUTH_CLIENT_SECRET`| none           | client secret of the OAuth consumer of the chatbot, see [Chatbot OAuth consumer](#chatbot-oauth-consumer) | Yes |
 | `PARALLEL_RUNJOBS_SERVICE_LOGLEVEL` | `notice` | log level of the job runner in `wiki-task` (`debug`, `info`, `notice`, `warn`, `error`) | Yes |
 
 For more variables to set in `.env`, please also check [documentation](https://github.com/hallowelt/docker-bluespice-wiki/blob/main/README.md) of the image behind the wiki-containers.
@@ -90,5 +92,19 @@ an administrator creates it on the wiki and configures it for the MCP server:
    ```
    ./bluespice-deploy up -d mcp
    ```
+
+## Chatbot OAuth consumer
+With `AI` enabled, the chatbot calls the MCP server on behalf of the users. It needs an OAuth consumer on the
+wiki with the callback URL `<WIKI_PROTOCOL>://<WIKI_HOST><WIKI_BASE_PATH>_chat/oauth/callback`. After the
+installation, create it with the maintenance script `extensions/WikiMCPTools/maintenance/createChatbotOAuthConsumer.php`
+(run in `wiki-task`), which prints the client ID and the client secret.
+Set them in `.env` and recreate the AI service:
+```
+CHATBOT_OAUTH_CLIENT_ID=<client ID>
+CHATBOT_OAUTH_CLIENT_SECRET=<client secret>
+```
+```
+./bluespice-deploy up -d ai
+```
 
 If the environment variable `DEV_WIKI_DEBUG` is set, one can set the `debug-entrypoint` GPC (=`$_REQUEST`) to a value matching the `MW_ENTRY_POINT` constant in context of the application to enable full debug log to `stdout` for any call to the specified entry point.

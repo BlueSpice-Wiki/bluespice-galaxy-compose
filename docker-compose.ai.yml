@@ -29,6 +29,10 @@ services:
       AI__OLLAMA__MODEL: ${OLLAMA_LLM_MODEL:-llama3.3}
       AI__ENVIRONMENT: ${AI__ENVIRONMENT:-production}
       AI__MCP__URL: http://mcp:4000/mcp
+      # OAuth consumer the chatbot uses to act on behalf of users, see README.md, "Chatbot OAuth consumer"
+      AI__OAUTH__CLIENT_ID: ${CHATBOT_OAUTH_CLIENT_ID:-}
+      AI__OAUTH__CLIENT_SECRET: ${CHATBOT_OAUTH_CLIENT_SECRET:-}
+      AI__OAUTH__REDIRECT_URI: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}_chat/oauth/callback
       TZ: ${TZ:-UTC}
     secrets:
       - AI__SECURITY__STATIC_API_TOKEN

@@ -16,10 +16,14 @@ services:
       VIRTUAL_PORT: 4000
       VIRTUAL_DEST: /
       MCP_WIKI_BASE_PATH: http://wiki-web:9090
-      # The browser of the user is sent to the authorization endpoint, the token exchange is proxied by MCP
-      MCP_OAUTH_ISSUER: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}w/oauth2
-      MCP_OAUTH_AUTHORIZATION_ENDPOINT: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}w/oauth2/authorize
-      MCP_OAUTH_TOKEN_ENDPOINT: http://wiki-web:9090/w/oauth2/access_token
+      # Issuer and authorization endpoint are opened in the user's browser; token and userinfo are proxied by MCP.
+      # All under /w/rest.php/oauth2, as /w/oauth2 answers 403.
+      MCP_OAUTH_ISSUER: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}w/rest.php/oauth2
+      MCP_OAUTH_AUTHORIZATION_ENDPOINT: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}w/rest.php/oauth2/authorize
+      MCP_OAUTH_TOKEN_ENDPOINT: http://wiki-web:9090/w/rest.php/oauth2/access_token
+      MCP_OAUTH_USERINFO_ENDPOINT: http://wiki-web:9090/w/rest.php/oauth2/resource/profile
+      # So that the discovery URLs include /_mcp
+      MCP_PUBLIC_URL: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}_mcp
       MCP_OAUTH_PROXY_TOKEN_ENDPOINT: true
       MCP_OAUTH_SCOPES: openid profile mcp
       MCP_OAUTH_CLIENT_ID: ${MCP_OAUTH_CLIENT_ID:-}
