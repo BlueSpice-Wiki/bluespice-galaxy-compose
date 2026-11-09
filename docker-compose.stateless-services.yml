@@ -47,9 +47,7 @@ services:
       GF_SERVER_DOMAIN: ${WIKI_HOST}
     restart: unless-stopped
 
-  gotenberg:
-    container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-gotenberg
+  officefileconverter:
+    container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-officefileconverter
     image: gotenberg/gotenberg:8
-    ports:
-      - "3000:3000"
     restart: unless-stopped
