@@ -23,6 +23,5 @@ services:
       MCP_OAUTH_USERINFO_ENDPOINT: http://wiki-web:9090/w/rest.php/oauth2/resource/profile
       # So that the discovery URLs include /_mcp
       MCP_PUBLIC_URL: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}_mcp
-      MCP_OAUTH_PROXY_TOKEN_ENDPOINT: true
       MCP_OAUTH_PUBLIC_WIKI_BASE: ${WIKI_PROTOCOL}://${WIKI_HOST}
     restart: unless-stopped
