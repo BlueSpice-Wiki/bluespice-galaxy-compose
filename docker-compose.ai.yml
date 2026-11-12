@@ -38,7 +38,7 @@ services:
       - AI__SECURITY__STATIC_API_TOKEN
     volumes:
       - ${DATADIR}/wiki/bluespice/rag:/watch
-    restart: unless-stopped
+    restart: ${RESTART_POLICY:-unless-stopped}
 
   ai-database:
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-ai-database
@@ -77,4 +77,4 @@ services:
     secrets:
       - PROMPT_TOKEN_SALT
       - PROMPT_BRIDGE_TOKEN
-    restart: unless-stopped
+    restart: ${RESTART_POLICY:-unless-stopped}
