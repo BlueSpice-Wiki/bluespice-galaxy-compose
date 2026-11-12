@@ -8,7 +8,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-mcp
     image: ${BLUESPICE_SERVICE_REPOSITORY}/galaxy-mcp:${VERSION}
     depends_on:
-      wiki-task:
+      wiki-web:
         condition: service_healthy
     environment:
       VIRTUAL_HOST: ${WIKI_HOST}
