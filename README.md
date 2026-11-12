@@ -56,6 +56,9 @@ To load all images of all editions from a registry with the layout `<registry>/<
 | `LETSENCRYPT`                | `false`        | enables LetsEcrpyt cert renew                        | Yes      |
 | `ADMIN_MAIL`                 | none           | contact e-mail for LetsEncrypt certificates          | No, if `LETSENCRYPT` is `true` |
 | `TZ`                         | `UTC`          | Timezone for BlueSpice and container system time     | Yes      |
+| `RESTART_POLICY`             | `unless-stopped` | restart policy of the long-running services        | Yes      |
+| `RUN_BACKUP`                 | `false`        | enables the backup container (`backup` service)      | Yes      |
+| `BACKUPDIR`                  | `${DATADIR}/backup` | path to the backups on the host                 | Yes      |
 | `CHAT`                       | `false`        | enables [Chat service connection](https://en.wiki.bluespice.com/wiki/Manual:Extension/ChatBot), not available in `glacier` | Yes      |
 | `AI`                         | `false`        | enables [AI service connection](https://en.wiki.bluespice.com/wiki/Manual:AI_integrations_-_Overview), requires `CHAT`, not available in `glacier` | Yes      |
 | `CHATBOT_OAUTH_CLIENT_ID`    | none           | client ID of the OAuth consumer the chatbot uses to act on behalf of users, see [Chatbot OAuth consumer](#chatbot-oauth-consumer) | Yes |

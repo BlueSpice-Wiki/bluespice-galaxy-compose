@@ -18,10 +18,10 @@ services:
       MCP_WIKI_BASE_PATH: http://wiki-web:9090
       # The authorization endpoint is opened in the user's browser; token and userinfo are proxied by MCP.
       # All under /w/rest.php/oauth2, as /w/oauth2 answers 403.
-      MCP_OAUTH_AUTHORIZATION_ENDPOINT: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}w/rest.php/oauth2/authorize
+      MCP_OAUTH_AUTHORIZATION_ENDPOINT: ${WIKI_PROTOCOL:-https}://${WIKI_HOST}${WIKI_BASE_PATH:-/}w/rest.php/oauth2/authorize
       MCP_OAUTH_TOKEN_ENDPOINT: http://wiki-web:9090/w/rest.php/oauth2/access_token
       MCP_OAUTH_USERINFO_ENDPOINT: http://wiki-web:9090/w/rest.php/oauth2/resource/profile
       # So that the discovery URLs include /_mcp
-      MCP_PUBLIC_URL: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}_mcp
-      MCP_OAUTH_PUBLIC_WIKI_BASE: ${WIKI_PROTOCOL}://${WIKI_HOST}
+      MCP_PUBLIC_URL: ${WIKI_PROTOCOL:-https}://${WIKI_HOST}${WIKI_BASE_PATH:-/}_mcp
+      MCP_OAUTH_PUBLIC_WIKI_BASE: ${WIKI_PROTOCOL:-https}://${WIKI_HOST}
     restart: ${RESTART_POLICY:-unless-stopped}
