@@ -30,7 +30,7 @@ services:
     restart: ${RESTART_POLICY:-unless-stopped}
 
   statisticsdashboard:
-    image: ${BLUESPICE_SERVICE_REPOSITORY}/statisticsdashboard:${VERSION}
+    image: ${BLUESPICE_SERVICE_REPOSITORY}/galaxy-statisticsdashboard:${VERSION}
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-statisticsdashboard
     restart: ${RESTART_POLICY:-unless-stopped}
     environment:
