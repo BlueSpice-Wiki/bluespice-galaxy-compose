@@ -2,21 +2,21 @@ services:
   cache:
     image: ${BLUESPICE_SERVICE_REPOSITORY}/galaxy-cache:${VERSION}
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-cache
-    restart: unless-stopped
+    restart: ${RESTART_POLICY:-unless-stopped}
   pdf:
     image: ${BLUESPICE_SERVICE_REPOSITORY}/galaxy-pdf:${VERSION}
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-pdf
-    restart: unless-stopped
+    restart: ${RESTART_POLICY:-unless-stopped}
 
   formula:
     image: ${BLUESPICE_SERVICE_REPOSITORY}/galaxy-formula:${VERSION}
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-formula
-    restart: unless-stopped
+    restart: ${RESTART_POLICY:-unless-stopped}
 
   diagram:
     image: ${BLUESPICE_SERVICE_REPOSITORY}/galaxy-diagram:${VERSION}
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-diagram
-    restart: unless-stopped
+    restart: ${RESTART_POLICY:-unless-stopped}
 
   wire:
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-wire
@@ -32,4 +32,20 @@ services:
   officefileconverter:
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-officefileconverter
     image: gotenberg/gotenberg:8
-    restart: unless-stopped
+    restart: ${RESTART_POLICY:-unless-stopped}
+
+  statisticsdashboard:
+    image: ${BLUESPICE_SERVICE_REPOSITORY}/galaxy-statisticsdashboard:${VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-statisticsdashboard
+    restart: ${RESTART_POLICY:-unless-stopped}
+    environment:
+      VIRTUAL_HOST: ${WIKI_HOST}
+      VIRTUAL_PATH: ${WIKI_BASE_PATH:-/}_statisticsdashboard/
+      VIRTUAL_PORT: 3000
+      VIRTUAL_DEST: /
+      GF_SERVER_ROOT_URL: https://${WIKI_HOST}${WIKI_BASE_PATH:-/}_statisticsdashboard/
+      GF_SERVER_PROTOCOL: http
+      GF_SERVER_DOMAIN: ${WIKI_HOST}
+      WIKI_API_URL: http://wiki-web:9090${WIKI_BASE_PATH:-/}w/rest.php
+    secrets:
+      - STATISTICS_API_KEY

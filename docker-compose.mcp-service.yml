@@ -1,14 +1,14 @@
 # MCP server of the wiki (Extension:WikiMCPTools), part of all editions, served at `<wiki>/_mcp/`. It has no
-# static access to the wiki: the tools run with the OAuth2 tokens of the users. The OAuth2 client
-# (`MCP_OAUTH_CLIENT_ID`, `MCP_OAUTH_CLIENT_SECRET`) is created manually on the wiki after the installation,
-# see README.md, "MCP server".
+# static access to the wiki: the tools run with the OAuth2 tokens of the users. The MCP server has no OAuth2
+# client of its own. Each MCP client (e.g. Claude Desktop) is registered on the wiki as an OAuth2 consumer
+# after the installation, see README.md, "MCP server".
 services:
 
   mcp:
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-mcp
     image: ${BLUESPICE_SERVICE_REPOSITORY}/galaxy-mcp:${VERSION}
     depends_on:
-      wiki-task:
+      wiki-web:
         condition: service_healthy
     environment:
       VIRTUAL_HOST: ${WIKI_HOST}
@@ -16,14 +16,12 @@ services:
       VIRTUAL_PORT: 4000
       VIRTUAL_DEST: /
       MCP_WIKI_BASE_PATH: http://wiki-web:9090
-      # The browser of the user is sent to the authorization endpoint, the token exchange is proxied by MCP
-      MCP_OAUTH_ISSUER: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}w/oauth2
-      MCP_OAUTH_AUTHORIZATION_ENDPOINT: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}w/oauth2/authorize
-      MCP_OAUTH_TOKEN_ENDPOINT: http://wiki-web:9090/w/oauth2/access_token
-      MCP_OAUTH_PROXY_TOKEN_ENDPOINT: true
-      MCP_OAUTH_SCOPES: openid profile mcp
-      MCP_OAUTH_CLIENT_ID: ${MCP_OAUTH_CLIENT_ID:-}
-      MCP_OAUTH_CLIENT_SECRET: ${MCP_OAUTH_CLIENT_SECRET:-}
-      MCP_OAUTH_REDIRECT_URI: ${WIKI_PROTOCOL}://${WIKI_HOST}${WIKI_BASE_PATH:-/}_mcp/oauth/callback
-      MCP_OAUTH_PUBLIC_WIKI_BASE: ${WIKI_PROTOCOL}://${WIKI_HOST}
-    restart: unless-stopped
+      # The authorization endpoint is opened in the user's browser; token and userinfo are proxied by MCP.
+      # All under /w/rest.php/oauth2, as /w/oauth2 answers 403.
+      MCP_OAUTH_AUTHORIZATION_ENDPOINT: ${WIKI_PROTOCOL:-https}://${WIKI_HOST}${WIKI_BASE_PATH:-/}w/rest.php/oauth2/authorize
+      MCP_OAUTH_TOKEN_ENDPOINT: http://wiki-web:9090/w/rest.php/oauth2/access_token
+      MCP_OAUTH_USERINFO_ENDPOINT: http://wiki-web:9090/w/rest.php/oauth2/resource/profile
+      # So that the discovery URLs include /_mcp
+      MCP_PUBLIC_URL: ${WIKI_PROTOCOL:-https}://${WIKI_HOST}${WIKI_BASE_PATH:-/}_mcp
+      MCP_OAUTH_PUBLIC_WIKI_BASE: ${WIKI_PROTOCOL:-https}://${WIKI_HOST}
+    restart: ${RESTART_POLICY:-unless-stopped}

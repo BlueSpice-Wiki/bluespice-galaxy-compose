@@ -56,39 +56,47 @@ To load all images of all editions from a registry with the layout `<registry>/<
 | `LETSENCRYPT`                | `false`        | enables LetsEcrpyt cert renew                        | Yes      |
 | `ADMIN_MAIL`                 | none           | contact e-mail for LetsEncrypt certificates          | No, if `LETSENCRYPT` is `true` |
 | `TZ`                         | `UTC`          | Timezone for BlueSpice and container system time     | Yes      |
+| `RESTART_POLICY`             | `unless-stopped` | restart policy of the long-running services        | Yes      |
+| `RUN_BACKUP`                 | `false`        | enables the backup container (`backup` service)      | Yes      |
+| `BACKUPDIR`                  | `${DATADIR}/backup` | path to the backups on the host                 | Yes      |
 | `CHAT`                       | `false`        | enables [Chat service connection](https://en.wiki.bluespice.com/wiki/Manual:Extension/ChatBot), not available in `glacier` | Yes      |
 | `AI`                         | `false`        | enables [AI service connection](https://en.wiki.bluespice.com/wiki/Manual:AI_integrations_-_Overview), requires `CHAT`, not available in `glacier` | Yes      |
-| `MCP_OAUTH_CLIENT_ID`        | none           | client key of the OAuth2 client of the MCP server, see [MCP server](#mcp-server) | Yes |
-| `MCP_OAUTH_CLIENT_SECRET`    | none           | client secret of the OAuth2 client of the MCP server, see [MCP server](#mcp-server) | Yes |
-| `PARALLEL_RUNJOBS_SERVICE_LOGLEVEL` | `notice` | log level of the job runner in `wiki-task` (`debug`, `info`, `notice`, `warn`, `error`) | Yes |
+| `CHATBOT_OAUTH_CLIENT_ID`    | none           | client ID of the OAuth consumer the chatbot uses to act on behalf of users, see [Chatbot OAuth consumer](#chatbot-oauth-consumer) | Yes |
+| `CHATBOT_OAUTH_CLIENT_SECRET`| none           | client secret of the OAuth consumer of the chatbot, see [Chatbot OAuth consumer](#chatbot-oauth-consumer) | Yes |
+| `PARALLEL_RUNJOBS_SERVICE_LOGLEVEL` | `error` (`WIKI_LOG_LEVEL` of the image) | log level of the job runner in `wiki-task` (`debug`, `info`, `notice`, `warn`, `error`) | Yes |
 
 For more variables to set in `.env`, please also check [documentation](https://github.com/hallowelt/docker-bluespice-wiki/blob/main/README.md) of the image behind the wiki-containers.
 
 ## MCP server
 The MCP server (`<wiki>/_mcp/`) has no access to the wiki on its own. The tools run on behalf of the users, with
-their permissions, using OAuth2. The OAuth2 client is not created during the installation. After the installation,
-an administrator creates it on the wiki and configures it for the MCP server:
+their permissions, using OAuth2. The MCP server has no OAuth2 client of its own and needs no configuration in
+`.env`. Instead, each MCP client (e.g. Claude Desktop) is registered on the wiki as an OAuth2 consumer. After the
+installation, an administrator:
 
-1. Open `Special:OAuthConsumerRegistration/propose/oauth2` on the wiki and propose a consumer:
-   - OAuth protocol version: OAuth 2.0
-   - OAuth "callback" URL: `<WIKI_PROTOCOL>://<WIKI_HOST><WIKI_BASE_PATH>_mcp/oauth/callback`, e.g.
-     `https://wiki.example.com/_mcp/oauth/callback`
+1. Proposes the consumer at `Special:OAuthConsumerRegistration/propose/oauth2` on the wiki (on the main wiki in a
+   farm). The account needs a valid email address.
+   - OAuth "callback" URL: the one of the MCP client, e.g. `http://localhost:3334/oauth/callback` for `mcp-remote`
    - "This consumer is for use only by …" (owner-only): not checked
    - Client is confidential: checked
    - Allowed OAuth2 grant types: "Authorization code" and "Refresh token"
-   - Applicable grants: "Basic rights", "Edit existing pages" and "Create, edit, and move pages"
+   - Applicable grants: "Basic rights", "Edit existing pages", "Create, edit, and move pages" and
+     "Delete pages, revisions, and log entries"
+2. Approves the consumer at `Special:OAuthManageConsumers/proposed`.
+3. Hands the client key and the client secret (shown only once) over to the users, who configure them in their
+   MCP client.
 
-   The wiki warns that the callback URL is on its own domain. Check "Ignore warnings", as `/_mcp/` is served by
-   the MCP server.
-2. Approve the consumer at `Special:OAuthManageConsumers/proposed`.
-3. Copy the client key and the client secret. The secret is shown only once.
-4. Set them in `.env` and recreate the MCP server:
-   ```
-   MCP_OAUTH_CLIENT_ID=<client key>
-   MCP_OAUTH_CLIENT_SECRET=<client secret>
-   ```
-   ```
-   ./bluespice-deploy up -d mcp
-   ```
+## Chatbot OAuth consumer
+With `AI` enabled, the chatbot calls the MCP server on behalf of the users. It needs an OAuth consumer on the
+wiki with the callback URL `<WIKI_PROTOCOL>://<WIKI_HOST><WIKI_BASE_PATH>_chat/oauth/callback`. After the
+installation, create it with the maintenance script `extensions/WikiMCPTools/maintenance/createChatbotOAuthConsumer.php`
+(run in `wiki-task`), which prints the client ID and the client secret.
+Set them in `.env` and recreate the AI service:
+```
+CHATBOT_OAUTH_CLIENT_ID=<client ID>
+CHATBOT_OAUTH_CLIENT_SECRET=<client secret>
+```
+```
+./bluespice-deploy up -d ai
+```
 
 If the environment variable `DEV_WIKI_DEBUG` is set, one can set the `debug-entrypoint` GPC (=`$_REQUEST`) to a value matching the `MW_ENTRY_POINT` constant in context of the application to enable full debug log to `stdout` for any call to the specified entry point.

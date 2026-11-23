@@ -34,6 +34,7 @@ x-common-secrets: &common-secrets
   - INTERNAL_SIMPLESAMLPHP_ADMIN_PASS
   - INTERNAL_SIMPLESAMLPHP_SECRET_SALT
   - INTERNAL_SIMPLESAMLPHP_SESSION_API_TOKEN
+  - INTERNAL_STATISTICS_API_KEY
   - INTERNAL_WIKI_SECRETKEY
   - INTERNAL_WIKI_UPGRADEKEY
   - INTERNAL_WIKI_TOKEN_AUTH_SALT
@@ -54,7 +55,7 @@ services:
   wiki-web:
     image: ${BLUESPICE_WIKI_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-wiki-web
-    restart: unless-stopped
+    restart: ${RESTART_POLICY:-unless-stopped}
     environment:
       <<: *common-environment
     command: start-web
@@ -68,7 +69,8 @@ services:
   wiki-task:
     image: ${BLUESPICE_WIKI_IMAGE}
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-wiki-task
-    restart: unless-stopped
+    restart: ${RESTART_POLICY:-unless-stopped}
+    init: true
     command: ["start-task --runAll"]
     environment:
       <<: *common-environment

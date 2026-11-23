@@ -3,7 +3,7 @@ services:
 
   metadatastore:
     container_name: ${COMPOSE_PROJECT_NAME:-bluespice}-metadatastore
-    restart: unless-stopped
+    restart: ${RESTART_POLICY:-unless-stopped}
     image: neo4j:5
     environment:
       NEO4J_AUTH: neo4j/${METADATASTORE_PASS}
