@@ -12,7 +12,7 @@ Set `EDITION` in `.env`. Each edition has its own wiki image, the service images
 
 | Service                        | `glacier` | `sky` | `sapphire` |
 |--------------------------------|:---------:|:-----:|:----------:|
-| Wiki, search, database, cache, PDF, formula, diagram, wire | ✅ | ✅ | ✅ |
+| Wiki, search, database, cache, PDF, diagram, wire | ✅ | ✅ | ✅ |
 | Shared job queue (Redis/Valkey) | –        | ✅    | ✅         |
 | Metadata store (NeoWiki)       | –         | ✅    | ✅         |
 | CollabPads                     | ✅        | ✅    | ✅         |
